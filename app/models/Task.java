@@ -1,12 +1,15 @@
 package models;
 
+import play.db.DB;
 import play.db.ebean.*;
 import play.data.validation.Constraints.*;
 
 import javax.persistence.*;
+import javax.sql.DataSource;
+import java.sql.Connection;
 import java.util.*;
 
-
+@Entity
 public class Task extends Model{
     @Id
     public Long id;
@@ -14,7 +17,12 @@ public class Task extends Model{
     @Required
     public String label;
 
-    public static Finder<Long, Task> find = new Finder(Long.class, Task.class);
+    DataSource ds = DB.getDataSource();
+    Connection connection = DB.getConnection();
+
+    public static Finder<Long,Task> find = new Finder<Long,Task>(
+            Long.class, Task.class
+    );
 
     public static List<Task> all() {
         return find.all();
